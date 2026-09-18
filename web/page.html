@@ -1,0 +1,146 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Grid Clock — one price, two very different hours</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!--
+  템플릿. **이 파일에는 분석 수치가 하나도 없다.**
+  `python3 src/export_web.py data/fuel2026.xml` 이 아래 표시 자리에 데이터를 주입해
+  web/index.html 을 만든다. 서버 없이 파일로 열어도 동작한다(file:// 에서 fetch 가 막힌다).
+-->
+<style>
+  :root{--ink:#111;--paper:#fff;--muted:#6b7280;--line:#e5e7eb;--bad:#b91c1c;--good:#15803d;--warn:#b45309}
+  *{box-sizing:border-box}
+  body{margin:0;font:16px/1.55 ui-sans-serif,system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+       color:var(--ink);background:var(--paper)}
+  main{max-width:860px;margin:0 auto;padding:32px 20px 80px}
+  h1{font-size:30px;line-height:1.2;letter-spacing:-.5px;margin:0 0 6px}
+  .sub{color:var(--muted);margin:0 0 28px}
+  .card{border:1px solid var(--line);border-radius:12px;padding:20px;margin:18px 0}
+  .verdict{font-size:34px;font-weight:800;letter-spacing:-.5px;margin:2px 0 6px}
+  .row{display:flex;flex-wrap:wrap;gap:22px;align-items:baseline}
+  .n{font-variant-numeric:tabular-nums;font-weight:700}
+  label{display:block;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+  select,input[type=range]{font:inherit;width:100%}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:18px}
+  table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;font-size:14px}
+  th,td{text-align:right;padding:5px 8px;border-bottom:1px solid var(--line)}
+  th:first-child,td:first-child{text-align:left}
+  th{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:1px}
+  tr.now td{background:#fff1f1;color:var(--bad);font-weight:700}
+  tr.best td{background:#f0fdf4;color:var(--good);font-weight:700}
+  .bar{display:inline-block;height:9px;background:#d1d5db;vertical-align:middle;border-radius:2px}
+  .against{border-left:4px solid var(--warn);background:#fffbeb;padding:14px 16px;border-radius:0 8px 8px 0;margin:10px 0}
+  .against b{color:var(--warn)}
+  footer{color:var(--muted);font-size:13px;margin-top:36px;border-top:1px solid var(--line);padding-top:16px}
+  code{background:#f3f4f6;padding:1px 5px;border-radius:4px;font-size:13px}
+  .pill{display:inline-block;font-size:12px;padding:2px 8px;border-radius:99px;background:#f3f4f6;color:var(--muted)}
+</style>
+<main>
+  <h1>Ontario charges one price for twelve hours.<br>The grid does not stay the same.</h1>
+  <p class="sub" id="lede"></p>
+
+  <div class="card">
+    <div class="grid">
+      <div><label for="hour">If you ran it at</label><select id="hour"></select></div>
+      <div><label for="load">this load</label><select id="load"></select></div>
+      <div><label for="season">in</label><select id="season">
+        <option value="summer_gas_pct">summer (May–Oct, in effect now)</option>
+        <option value="winter_gas_pct">winter (Nov–Apr)</option>
+      </select></div>
+    </div>
+    <hr style="border:0;border-top:1px solid var(--line);margin:18px 0">
+    <div class="verdict" id="verdict"></div>
+    <div class="row" id="detail"></div>
+  </div>
+
+  <div class="against">
+    <b>The comparison that would kill this page.</b>
+    <div id="timer"></div>
+  </div>
+
+  <div class="card">
+    <label>Every hour, measured</label>
+    <table><thead><tr><th>hour</th><th>TOU</th><th>ULO</th><th>gas share</th><th></th></tr></thead>
+    <tbody id="tbl"></tbody></table>
+  </div>
+
+  <div class="card">
+    <label>Does it work on a given night?</label>
+    <div id="nights"></div>
+  </div>
+
+  <footer id="prov"></footer>
+</main>
+
+<script>
+/*DATA_START*/
+const DATA = null;   // export_web.py 가 여기를 덮어쓴다
+/*DATA_END*/
+
+const $ = (id) => document.getElementById(id);
+const pct = (x) => x.toFixed(2) + " %";
+const H = DATA.hours, HD = DATA.headline, PN = DATA.per_night;
+const byHour = Object.fromEntries(H.map(h => [h.hour, h]));
+
+for (const h of H) $("hour").add(new Option(`${String(h.hour).padStart(2,"0")}:00`, h.hour));
+for (const [k, v] of Object.entries(DATA.appliances)) $("load").add(new Option(`${k} (${v} kWh)`, v));
+$("hour").value = String(HD.dirtiest_cheap_hour);
+
+$("lede").textContent =
+  `Inside the ${HD.cheap_bracket} bracket — ${HD.cheap_hours} hours at one price — gas share runs from `
+  + `${pct(HD.cleanest_cheap_pct)} to ${pct(HD.dirtiest_cheap_pct)}. `
+  + `Measured on ${DATA.population.summer_weekdays} Ontario summer weekdays, `
+  + `${DATA.population.first_day} to ${DATA.population.last_day}. No emission factor is used for the ordering.`;
+
+function render() {
+  const key = $("season").value, kwh = Number($("load").value), now = Number($("hour").value);
+  const vals = H.filter(h => h[key] != null);
+  const cheap = vals.filter(h => h.tou === "off-peak");
+  const best = cheap.reduce((a, b) => (b[key] < a[key] ? b : a));
+  const cur = byHour[now];
+  const gap = cur[key] - best[key];
+
+  $("verdict").textContent = now === best.hour
+    ? `That is already the cleanest hour you can pay ${cur.tou_cents}¢ for.`
+    : `Wait until ${best.hour}:00 — same ${best.tou_cents}¢ price, ${gap.toFixed(2)} pp less gas.`;
+
+  // g CO2 는 **환산**이지 측정이 아니다. 화면에서 그렇게 말한다.
+  const ef = DATA.source.ef_gas_g_per_kwh;
+  $("detail").innerHTML =
+    `<div><span class="n">${pct(cur[key])}</span> gas at ${now}:00 · ${cur.tou} ${cur.tou_cents}¢</div>`
+  + `<div><span class="n">${pct(best[key])}</span> gas at ${best.hour}:00 · ${best.tou} ${best.tou_cents}¢</div>`
+  + `<div class="pill">≈ ${(gap / 100 * kwh * ef).toFixed(0)} g CO₂ for this load, if you assume ${ef} g/kWh for gas — that assumption is not part of the finding</div>`;
+
+  const lo = Math.min(...vals.map(h => h[key])), hi = Math.max(...vals.map(h => h[key]));
+  $("tbl").innerHTML = vals.map(h =>
+    `<tr class="${h.hour === now ? "now" : h.hour === best.hour ? "best" : ""}">`
+    + `<td>${String(h.hour).padStart(2,"0")}:00</td><td>${h.tou_cents}¢ ${h.tou}</td>`
+    + `<td>${h.ulo_cents}¢ ${h.ulo}</td><td>${pct(h[key])}</td>`
+    + `<td style="width:38%"><span class="bar" style="width:${((h[key]-lo)/(hi-lo)*100).toFixed(1)}%"></span></td></tr>`
+  ).join("");
+}
+["hour","load","season"].forEach(id => $(id).addEventListener("input", render));
+render();
+
+$("timer").innerHTML =
+  `<p>${DATA.honesty.timer}</p>`
++ `<p>${DATA.honesty.resolution}</p>`
++ `<p>${DATA.honesty.metric}</p>`;
+
+$("nights").innerHTML =
+  `<p>A mean over ${PN.n} nights and a gain on <em>your</em> night are different claims. `
++ `Scored night by night — evening versus ${HD.cleanest_cheap_hour}:00 — overnight wins `
++ `<span class="n">${PN.wins}/${PN.n}</span> (${PN.win_pct} %). It loses the other ${PN.n - PN.wins}.</p>`
++ `<table><thead><tr><th>worst</th><th>10th</th><th>median</th><th>90th</th><th>best</th></tr></thead>`
++ `<tbody><tr><td>${PN.worst_pp} pp</td><td>${PN.p10_pp} pp</td><td>+${PN.median_pp} pp</td>`
++ `<td>+${PN.p90_pp} pp</td><td>+${PN.best_pp} pp</td></tr></tbody></table>`
++ `<p class="sub" style="margin-top:10px">When it loses it loses small; when it wins it often wins large. `
++ `That is what makes a fixed rule worth following without a forecast.</p>`;
+
+$("prov").innerHTML =
+  `Source: ${DATA.source.dataset} — <a href="${DATA.source.url}">${DATA.source.url}</a>. `
++ `${DATA.source.note} Statutory holidays excluded (${DATA.source.holidays_excluded.length} on the OEB schedule; `
++ `Ontario bills them off-peak all day, so their bracket structure is not the one under test). `
++ `Winter weekdays in range: ${DATA.population.winter_weekdays}. `
++ `Every number on this page was written by <code>src/export_web.py</code> from script output — none typed by hand.`;
+</script>

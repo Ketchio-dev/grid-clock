@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="620" height="356" font-family="system-ui,-apple-system,sans-serif">
+<rect width="620" height="356" rx="14" fill="#111"/>
+<text x="34" y="52" font-size="15" fill="#9aa">typical summer weeknight · one dryer load (3.0 kWh)</text>
+<text x="34" y="106" font-size="40" font-weight="700" fill="#fff">run it at 3:00</text>
+<text x="34" y="140" font-size="16" fill="#8fd18f">89 g CO₂ less than now (20:00)</text>
+<line x1="34" y1="166" x2="586" y2="166" stroke="#333"/>
+<text x="34" y="200" font-size="17" fill="#ccc">now, 20:00</text>
+<text x="210" y="200" font-size="21" font-weight="700" fill="#d86a6a">369 g</text>
+<text x="330" y="200" font-size="15" fill="#999">TOU 9.8¢ · ULO 39.1¢</text>
+<text x="34" y="238" font-size="17" fill="#ccc">3:00</text>
+<text x="210" y="238" font-size="21" font-weight="700" fill="#8fd18f">280 g</text>
+<text x="330" y="238" font-size="15" fill="#999">TOU 9.8¢ · ULO 3.9¢</text>
+<text x="34" y="286" font-size="13" fill="#7a7a7a">Both hours sit in the same TOU bracket, so price says nothing about this.</text>
+<text x="34" y="308" font-size="13" fill="#7a7a7a">Average-emissions basis. We do not claim a saving; on a marginal basis it is larger.</text>
+<text x="34" y="330" font-size="13" fill="#7a7a7a">Mean of 92 summer weeknights (holidays excluded), not a forecast for tonight.</text>
+</svg>

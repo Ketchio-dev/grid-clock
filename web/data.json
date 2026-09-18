@@ -1,0 +1,278 @@
+{
+ "source": {
+  "dataset": "IESO Generator Output by Fuel Type Hourly",
+  "url": "https://reports-public.ieso.ca/public/GenOutputbyFuelHourly/",
+  "note": "gas share of generation. no emission factor is used for the ordering.",
+  "ef_gas_g_per_kwh": 490.0,
+  "holidays_excluded": [
+   "2026-01-01",
+   "2026-02-16",
+   "2026-04-03",
+   "2026-05-18",
+   "2026-07-01",
+   "2026-08-03",
+   "2026-09-07",
+   "2026-10-12",
+   "2026-12-25",
+   "2026-12-28"
+  ]
+ },
+ "population": {
+  "summer_weekdays": 92,
+  "winter_weekdays": 83,
+  "first_day": "2026-05-01",
+  "last_day": "2026-09-11"
+ },
+ "hours": [
+  {
+   "hour": 0,
+   "summer_gas_pct": 21.4957,
+   "winter_gas_pct": 20.5256,
+   "tou": "off-peak",
+   "tou_cents": 9.8,
+   "ulo": "ultra-low",
+   "ulo_cents": 3.9
+  },
+  {
+   "hour": 1,
+   "summer_gas_pct": 19.9609,
+   "winter_gas_pct": 20.1454,
+   "tou": "off-peak",
+   "tou_cents": 9.8,
+   "ulo": "ultra-low",
+   "ulo_cents": 3.9
+  },
+  {
+   "hour": 2,
+   "summer_gas_pct": 19.2726,
+   "winter_gas_pct": 20.0437,
+   "tou": "off-peak",
+   "tou_cents": 9.8,
+   "ulo": "ultra-low",
+   "ulo_cents": 3.9
+  },
+  {
+   "hour": 3,
+   "summer_gas_pct": 19.0559,
+   "winter_gas_pct": 20.0744,
+   "tou": "off-peak",
+   "tou_cents": 9.8,
+   "ulo": "ultra-low",
+   "ulo_cents": 3.9
+  },
+  {
+   "hour": 4,
+   "summer_gas_pct": 19.0641,
+   "winter_gas_pct": 20.4988,
+   "tou": "off-peak",
+   "tou_cents": 9.8,
+   "ulo": "ultra-low",
+   "ulo_cents": 3.9
+  },
+  {
+   "hour": 5,
+   "summer_gas_pct": 19.4647,
+   "winter_gas_pct": 21.0672,
+   "tou": "off-peak",
+   "tou_cents": 9.8,
+   "ulo": "ultra-low",
+   "ulo_cents": 3.9
+  },
+  {
+   "hour": 6,
+   "summer_gas_pct": 20.6429,
+   "winter_gas_pct": 22.1293,
+   "tou": "off-peak",
+   "tou_cents": 9.8,
+   "ulo": "ultra-low",
+   "ulo_cents": 3.9
+  },
+  {
+   "hour": 7,
+   "summer_gas_pct": 21.8116,
+   "winter_gas_pct": 23.1378,
+   "tou": "mid-peak",
+   "tou_cents": 15.7,
+   "ulo": "mid-peak",
+   "ulo_cents": 15.7
+  },
+  {
+   "hour": 8,
+   "summer_gas_pct": 22.7356,
+   "winter_gas_pct": 23.1605,
+   "tou": "mid-peak",
+   "tou_cents": 15.7,
+   "ulo": "mid-peak",
+   "ulo_cents": 15.7
+  },
+  {
+   "hour": 9,
+   "summer_gas_pct": 22.8604,
+   "winter_gas_pct": 22.7087,
+   "tou": "mid-peak",
+   "tou_cents": 15.7,
+   "ulo": "mid-peak",
+   "ulo_cents": 15.7
+  },
+  {
+   "hour": 10,
+   "summer_gas_pct": 23.0298,
+   "winter_gas_pct": 22.3212,
+   "tou": "mid-peak",
+   "tou_cents": 15.7,
+   "ulo": "mid-peak",
+   "ulo_cents": 15.7
+  },
+  {
+   "hour": 11,
+   "summer_gas_pct": 23.1895,
+   "winter_gas_pct": 22.1532,
+   "tou": "on-peak",
+   "tou_cents": 20.3,
+   "ulo": "mid-peak",
+   "ulo_cents": 15.7
+  },
+  {
+   "hour": 12,
+   "summer_gas_pct": 23.4133,
+   "winter_gas_pct": 22.1533,
+   "tou": "on-peak",
+   "tou_cents": 20.3,
+   "ulo": "mid-peak",
+   "ulo_cents": 15.7
+  },
+  {
+   "hour": 13,
+   "summer_gas_pct": 23.5744,
+   "winter_gas_pct": 21.9735,
+   "tou": "on-peak",
+   "tou_cents": 20.3,
+   "ulo": "mid-peak",
+   "ulo_cents": 15.7
+  },
+  {
+   "hour": 14,
+   "summer_gas_pct": 23.6249,
+   "winter_gas_pct": 21.9078,
+   "tou": "on-peak",
+   "tou_cents": 20.3,
+   "ulo": "mid-peak",
+   "ulo_cents": 15.7
+  },
+  {
+   "hour": 15,
+   "summer_gas_pct": 23.8568,
+   "winter_gas_pct": 22.0401,
+   "tou": "on-peak",
+   "tou_cents": 20.3,
+   "ulo": "mid-peak",
+   "ulo_cents": 15.7
+  },
+  {
+   "hour": 16,
+   "summer_gas_pct": 24.1884,
+   "winter_gas_pct": 22.3728,
+   "tou": "on-peak",
+   "tou_cents": 20.3,
+   "ulo": "on-peak",
+   "ulo_cents": 39.1
+  },
+  {
+   "hour": 17,
+   "summer_gas_pct": 24.469,
+   "winter_gas_pct": 22.983,
+   "tou": "mid-peak",
+   "tou_cents": 15.7,
+   "ulo": "on-peak",
+   "ulo_cents": 39.1
+  },
+  {
+   "hour": 18,
+   "summer_gas_pct": 24.6388,
+   "winter_gas_pct": 23.4425,
+   "tou": "mid-peak",
+   "tou_cents": 15.7,
+   "ulo": "on-peak",
+   "ulo_cents": 39.1
+  },
+  {
+   "hour": 19,
+   "summer_gas_pct": 24.8304,
+   "winter_gas_pct": 23.4007,
+   "tou": "off-peak",
+   "tou_cents": 9.8,
+   "ulo": "on-peak",
+   "ulo_cents": 39.1
+  },
+  {
+   "hour": 20,
+   "summer_gas_pct": 25.112,
+   "winter_gas_pct": 23.6173,
+   "tou": "off-peak",
+   "tou_cents": 9.8,
+   "ulo": "on-peak",
+   "ulo_cents": 39.1
+  },
+  {
+   "hour": 21,
+   "summer_gas_pct": 25.2288,
+   "winter_gas_pct": 23.5129,
+   "tou": "off-peak",
+   "tou_cents": 9.8,
+   "ulo": "mid-peak",
+   "ulo_cents": 15.7
+  },
+  {
+   "hour": 22,
+   "summer_gas_pct": 24.6983,
+   "winter_gas_pct": 22.9111,
+   "tou": "off-peak",
+   "tou_cents": 9.8,
+   "ulo": "mid-peak",
+   "ulo_cents": 15.7
+  },
+  {
+   "hour": 23,
+   "summer_gas_pct": 23.5724,
+   "winter_gas_pct": 21.6428,
+   "tou": "off-peak",
+   "tou_cents": 9.8,
+   "ulo": "ultra-low",
+   "ulo_cents": 3.9
+  }
+ ],
+ "headline": {
+  "cheap_bracket": "9.8c off-peak",
+  "cheap_hours": 12,
+  "dirtiest_cheap_hour": 21,
+  "dirtiest_cheap_pct": 25.2288,
+  "cleanest_cheap_hour": 3,
+  "cleanest_cheap_pct": 19.0559,
+  "ratio": 1.3239,
+  "spread_pp": 6.1729,
+  "dearest_bracket_peak_hour": 16,
+  "dearest_bracket_peak_pct": 24.1884,
+  "crossover_pp": 1.0404
+ },
+ "per_night": {
+  "n": 92,
+  "wins": 75,
+  "win_pct": 81.52,
+  "worst_pp": -4.08,
+  "p10_pp": -0.66,
+  "median_pp": 5.31,
+  "p90_pp": 13.16,
+  "best_pp": 20.49
+ },
+ "appliances": {
+  "dryer": 3.0,
+  "dishwasher": 1.5,
+  "washer": 0.9,
+  "EV charge": 7.0
+ },
+ "honesty": {
+  "timer": "A plug-in timer set to 3:00 gets you the same hour. This page is the reason to set one, not a replacement for it.",
+  "resolution": "Dropping four statutory holidays moved our best hour by one. We recommend a window, not a clock reading.",
+  "metric": "Gas share, measured. Not emissions, not marginal emissions."
+ }
+}
