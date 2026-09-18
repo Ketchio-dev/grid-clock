@@ -598,7 +598,10 @@ if os.path.exists(DATA):
             _m = re.search(_pat, _t)
             if not _m:
                 _rank_bad.append(f"{_f} 에서 그 문장을 못 읽었다"); continue
-            _words = {"two": 2, "three": 3, "four": 4, "five": 5, "six": 6}
+            # 문서가 어떤 수를 적든 실제 순위로 판정한다. 참고로 3~6 은 전부 참이고
+            # 7부터 거짓이다 — 주장이 특정 값에 아슬아슬하게 걸려 있지 않다는 뜻이다.
+            _words = {"two": 2, "three": 3, "four": 4, "five": 5, "six": 6,
+                      "seven": 7, "eight": 8, "nine": 9, "ten": 10}
             _n1, _n2 = _words.get(_m.group(1).lower()), _words.get(_m.group(2).lower())
             if _n1 is None or _n2 is None or _n1 != _n2:
                 _rank_bad.append(f"{_f}: 두 수가 다르거나 못 읽었다 ({_m.group(1)}/{_m.group(2)})"); continue
