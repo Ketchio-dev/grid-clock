@@ -186,6 +186,16 @@ SABS = [
     ("PNG 출처 해시를 옛 것으로 되돌린다", "figures/.png-from.json",
      r"re:\"sha\": \"[0-9a-f]{16}\"", '"sha": "deadbeefdeadbeef"',
      "PNG 가 SVG 보다 낡지 않았다"),
+    ("VERIFICATION.md 의 검사 개수를 옛 값으로 되돌린다", "VERIFICATION.md",
+     r"re:#\s*\d+ checks on the path", "# 27 checks on the path",
+     "어느 문서도 검사·사보타주 개수를"),
+    ("Devpost 산문의 겨울 어긋남을 0으로 되돌린다", "submission/devpost.md",
+     "**Two misaligned hours.**", "**Zero misaligned hours.**",
+     "겨울 **산문**이 winter 출력과"),
+    ("Devpost 제목의 승률을 부풀린다", "submission/devpost.md",
+     r"re:## Does it work on a given night\? \d+ % of them\.",
+     "## Does it work on a given night? 86 % of them.",
+     "'밤마다 되는가' 제목이 replay 출력과"),
 ]
 
 def check():

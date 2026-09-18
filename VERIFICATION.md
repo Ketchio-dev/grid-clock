@@ -7,8 +7,8 @@ finding.
 ## What the checks are
 
 ```bash
-python3 src/check_demo.py            # 27 checks on the path the demo walks, fixed denominator
-python3 src/sabotage.py              # 39 planted defects — all must be caught (~6 min)
+python3 src/check_demo.py            # 36 checks on the path the demo walks, fixed denominator
+python3 src/sabotage.py              # 49 planted defects — all must be caught (~6 min)
 python3 src/determinism.py data/fuel2026.xml   # same input, same answer, across 5 hash seeds
 ```
 

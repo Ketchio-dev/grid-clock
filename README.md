@@ -215,7 +215,7 @@ circular-rotation null, a 48× move, so we lean on the mechanism rather than the
 time**, so every summer observation was being filed one hour early — the single largest
 correction in this project, and the one that moved the recommended hour from 2 a.m. to 3 a.m.
 
-33 checks run on the path the demo walks, at a denominator that cannot shrink. 46 defects are
+36 checks run on the path the demo walks, at a denominator that cannot shrink. 49 defects are
 planted deliberately and all are caught, and every check is targeted by at least one of them.
 Every number in this file, in both figures, and in the submission documents is bound by regex to
 a line of script output — parsed from what the script printed, never recomputed by the checker.

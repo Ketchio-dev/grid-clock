@@ -9,7 +9,7 @@ deadline."* **마감 후에는 손대지 마라** (제출물에 반영되지 않
 ## 1. 제출 전 저장소 확인
 
 ```bash
-python3 src/check_demo.py                       # 27/27, 분모 고정
+python3 src/check_demo.py                       # 36/36, 분모 고정
 python3 src/sabotage.py                         # 전부 검출 · 걸린 시간은 스크립트가 찍는다
 python3 src/determinism.py data/fuel2026.xml    # 시드 5종에서 동일
 ```
@@ -47,7 +47,8 @@ npx remotion render GridClock out/grid-clock.mp4
 - [ ] **YouTube 나 Vimeo 에 업로드** — Devpost 는 파일 업로드가 아니라 **링크**를 받는다
 - [ ] 공개 또는 링크 공개(비공개면 심사위원이 못 본다)
 
-타이머 장면(6번, "A timer already captures 100.0 % of what we offer")이 이 영상의 핵심이다.
+타이머 장면(6번 — baseline.py 의 "A timer already captures … % of what we offer" 를
+덱이 그대로 주입한다)이 이 영상의 핵심이다. **수치를 여기 적어 두지 않는다** — 적어 두면 낡는다.
 `submission/video-script.md` 는 **촬영용 옛 대본**이다 — 실제 대본은 덱의 `narration` 이다.
 
 ## 3-2. 라이브 앱 (새로 생김 — "(if applicable)" 이지만 Completion 에 쓰인다)

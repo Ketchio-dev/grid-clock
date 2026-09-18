@@ -1,30 +1,25 @@
 # Devpost body — Grid Clock
 
-> **Note for the author (not for submission):** the Inspiration section is written, but it
-> rests on one fact only you can confirm: **that your household actually runs the washing
-> machine late because the off-peak rate is lower.** If that is not true, say what is and the
-> paragraph gets rewritten around it. Everything else in that section is either a verified
-> project number or your own reaction, and nothing in it was invented to sound good.
-
 **Project name** (Devpost field 1):
 
 > **Grid Clock**
 
-**Project tagline** (Devpost field 2 — **required**, and it is what shows on the gallery tile).
-The tile has to read as *environmental* on sight: 2025's 1st and 2nd place did, 3rd did not.
-Three candidates — **the author picks one**:
+**Project tagline** (Devpost field 2 — required; it is what shows on the gallery tile):
 
-| # | Tagline | Trade-off |
+> **Ontario's off-peak electricity has one price. It does not have one fuel mix.**
+
+Four were drafted. This one is GPT-6 Pro's, proposed when it was asked to choose among the
+other three, and it rejected the leading candidate — *"the cheapest hour on your electricity
+bill is the one that burns the most gas"* — as overclaiming on two counts our own data
+confirms: twelve hours share the 9.8¢ price, so there is no single "cheapest hour"; and we
+measure gas **share**, not how much gas is **burned**. The three it replaced are kept below
+for the record.
+
+| # | Drafted, not used | Why not |
 |---|---|---|
-| A | *The cheapest hour on your electricity bill is the one that burns the most gas.* | Punchiest, reads environmental on sight, and stays inside what we measured — "dirtiest" would be an emissions claim we deliberately do not make |
-| B | *Ontario prices 9 p.m. and 3 a.m. the same. The grid does not — 25.23 % gas versus 19.06 %.* | Most concrete, but two numbers is a lot for a tile |
+| A | *The cheapest hour on your electricity bill is the one that burns the most gas.* | Two overclaims, above |
+| B | *Ontario prices 9 p.m. and 3 a.m. the same. The grid does not — 25.23 % gas versus 19.06 %.* | Accurate, but two numbers is a lot for a tile |
 | C | *One price, 9.8¢, for twelve hours — and a 1.324× spread in how much gas you burn inside it.* | Most precise, weakest as a hook |
-| D | *Ontario's off-peak electricity has one price. It does not have one fuel mix.* | GPT-6 Pro proposed this when asked to pick among A–C, and rejected A as overclaiming on two counts we can confirm from our own data: twelve hours share the 9.8¢ price, so there is no single "cheapest hour"; and we measure gas **share**, not how much gas is **burned** |
-
-**A is the recommendation.** The tile's job is to make a judge open the page, and the counter-
-intuitive sentence does that without asking them to parse figures; the numbers are one click away
-and every one of them is bound to script output. B is the fallback if the track judges want a
-quantity visible up front.
 
 ---
 
@@ -71,11 +66,11 @@ at exactly that hour.
 
 ## Why now
 
-Winter does not have this problem. Winter's tariff puts on-peak in two blocks, 7–11 a.m. and
-5–7 p.m., and the second one covers the evening gas ramp. **Zero misaligned hours.**
+Winter has half as much of this problem. Winter's tariff puts on-peak in two blocks, 7–11 a.m.
+and 5–7 p.m., and the second one covers most of the evening gas ramp. **Two misaligned hours.**
 
 Summer has a single on-peak block, 11 a.m. to 5 p.m., and off-peak opens at 7 p.m. — precisely
-while gas output is still climbing. **Three misaligned hours.**
+while gas output is still climbing. **Four misaligned hours.**
 
 | | Worst | Best | Spread | Misaligned |
 |---|---|---|---|---|
@@ -95,7 +90,7 @@ signals. None of this is ours. Two things here are not in those products:
 2. The claim needs **no emission factor.** Gas share is measured; every ratio and ordering
    survives whatever intensity you assign to a gas plant.
 
-## Does it work on a given night? 86 % of them.
+## Does it work on a given night? 82 % of them.
 
 Everything else here is a mean over 92 nights. "The average gain is 6.06 pp" and "you gain
 tonight" are different claims, and only the second one is advice. So I replayed each night
@@ -197,9 +192,10 @@ not an assumption you should verify.**
 - **No claim to beat ULO.** Ontario's Ultra-Low Overnight plan already prices the evening at
   39.1¢. It is a baseline to beat or complement — not proof that the tariffs contradict each
   other, since they are separate products and nobody is on both.
-- **No claim to beat a timer.** A $12 plug-in timer at 2 a.m. gets 19.27 % gas share; I
-  recommend the same hour. I am not a better scheduler. What I have is the measurement
-  that gives someone a reason to set the timer, against a default tariff that argues otherwise.
+- **No claim to beat a timer.** A $12 plug-in timer at 2 a.m. gets 19.27 % gas share; my 3 a.m.
+  pick gets 19.06 %. Hour-picking is worth 0.217 pp, and a timer set to 3:00 gets my hour
+  exactly. I am not a better scheduler. What I have is the measurement that gives someone a
+  reason to set the timer at all, against a default tariff that argues otherwise.
 - What I do claim is narrow and measured: **price does not stand in for carbon**, and Ontario's
   default summer tariff hides a 1.324× gas-share spread inside a single price.
 

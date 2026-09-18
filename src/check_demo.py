@@ -53,6 +53,9 @@ NAMES = [
     "IESO 시각을 현지 시각으로 바꾸지 않고 쓰는 곳이 없다",
     "문서가 말하는 '가장 더러운 앞 N시간'이 실제 순위와 맞는다",
     "영상·제출에 쓰는 PNG 가 SVG 보다 낡지 않았다",
+    "어느 문서도 검사·사보타주 개수를 틀리게 적지 않았다",
+    "Devpost 의 겨울 **산문**이 winter 출력과 일치한다",
+    "Devpost 의 '밤마다 되는가' 제목이 replay 출력과 일치한다",
 ]
 result = {n: (False, "실행되지 않음") for n in NAMES}
 assert len(NAMES) == len(set(NAMES)), "검사 이름이 중복된다"
@@ -647,6 +650,76 @@ if os.path.exists(DATA):
         if _rec.get("sha") != _sha16(_sp):
             _png_bad.append(f"{_png} 이 지금 {_src} 에서 나온 것이 아니다 — python3 tools/svg2png.py 를 돌려라")
     ok(NAME("영상·제출에 쓰는 PNG 가 SVG 보다 낡지 않았다"), not _png_bad, "; ".join(_png_bad[:3]))
+
+    # **README 만 묶고 있었다.** VERIFICATION.md 는 "27 checks / 39 planted defects" 를,
+    # CHECKLIST.md 는 "27/27" 을 그대로 들고 있었다 — 그리고 README 는 "전체 기록은
+    # VERIFICATION.md" 라고 심사위원을 그쪽으로 보낸다. 증거로 내놓은 문서가 주장과 어긋났다.
+    # 그래서 **개수를 적은 문서를 전부 찾아서** 대조한다. 새 문서가 생겨도 걸린다.
+    import glob as _g2
+    _cnt_bad = []
+    _docs2 = ([os.path.join(ROOT, f) for f in ("README.md", "VERIFICATION.md")]
+              + sorted(_g2.glob(os.path.join(ROOT, "submission", "*.md"))))
+    _pats = [
+        (r"(\d+)\s*checks?\s+(?:run\s+)?on the path", n_checks, "검사"),
+        (r"check_demo\.py[^\n]*?#\s*(\d+)\s*checks", n_checks, "검사"),
+        (r"check_demo\.py[^\n]*?#\s*(\d+)\s*/\s*\d+", n_checks, "검사"),
+        (r"(\d+)\s*planted defects", n_sabs, "사보타주"),
+        (r"(\d+) defects are\s*\n?\s*planted", n_sabs, "사보타주"),
+        (r"sabotage\.py[^\n]*?#\s*(\d+)\s*planted", n_sabs, "사보타주"),
+    ]
+    for _f in _docs2:
+        if not os.path.exists(_f):
+            continue
+        _t = open(_f, encoding="utf-8").read()
+        for _pat, _want, _what in _pats:
+            if _want is None:
+                continue
+            for _m in re.finditer(_pat, _t, re.S):
+                if int(_m.group(1)) != _want:
+                    _cnt_bad.append(f"{os.path.basename(_f)}: {_what} {_m.group(1)} (실제 {_want})")
+    _cnt_bad = sorted(set(_cnt_bad))
+    ok(NAME("어느 문서도 검사·사보타주 개수를 틀리게 적지 않았다"), not _cnt_bad, "; ".join(_cnt_bad[:4]))
+
+    # **표만 묶고 산문은 안 묶었다.** Devpost 본문은 표에 "4 hours / 2 hours" 를 적어 두고,
+    # 그 여덟 줄 위 산문에는 "Zero misaligned hours / Three misaligned hours" 를 남겨 뒀다.
+    # 시계 정렬 이전 값이다. 심사위원은 둘을 한 화면에서 같이 읽는다.
+    rc_w2, out_w2, _ = run("winter.py")
+    _wm = {}
+    for _lbl, _key in (("여름", "s"), ("겨울", "w")):
+        # winter.py 는 "=== 여름 (5~10월) ===" 처럼 표제 안에 === 가 또 있다.
+        # 그냥 "===" 로 자르면 표제 뒷부분만 잡힌다. 다음 표제까지를 구간으로 본다.
+        _m0 = re.search(rf"=== {_lbl}[^\n]*\n(.*?)(?=\n\s*===|\Z)", out_w2, re.S)
+        _blk = _m0.group(1) if _m0 else ""
+        _m = re.search(r"어긋남 (?:있음 \((\d+)시간\)|없음())", _blk)
+        _wm[_key] = int(_m.group(1)) if (_m and _m.group(1)) else (0 if _m else None)
+    _W = {0: "Zero", 1: "One", 2: "Two", 3: "Three", 4: "Four", 5: "Five", 6: "Six"}
+    _DEV2 = os.path.join(ROOT, "submission", "devpost.md")
+    _dp2 = open(_DEV2, encoding="utf-8").read() if os.path.exists(_DEV2) else ""
+    _pr_bad = []
+    if _wm["s"] is None or _wm["w"] is None:
+        _pr_bad.append("winter 출력에서 어긋난 시간 수를 못 읽었다")
+    else:
+        for _key, _label in (("w", "겨울"), ("s", "여름")):
+            _want_word = _W.get(_wm[_key])
+            _found = re.findall(r"\*\*(\w+) misaligned hours?\.?\*\*", _dp2)
+            if not _found:
+                _pr_bad.append("devpost 산문에서 'N misaligned hours' 를 못 찾았다"); break
+            if _want_word not in _found:
+                _pr_bad.append(f"{_label} {_wm[_key]}시간({_want_word})이 devpost 산문에 없다 — 있는 것: {_found}")
+    ok(NAME("Devpost 의 겨울 **산문**이 winter 출력과 일치한다"), not _pr_bad, "; ".join(_pr_bad[:2]))
+
+    # 제목의 퍼센트도 묶는다. README 는 82 %, Devpost 는 86 % 였다 — 같은 수치를 4.5 pp 다르게.
+    rc_r2, out_r2, _ = run("replay.py")
+    _rw = one(r"1h\s+(\d+)/(\d+)\s+\(\s*([\d.]+) %\)", out_r2)
+    _dh = one(r"## Does it work on a given night\? (\d+) % of them\.", _dp2)
+    _hd_bad = []
+    if not _rw:
+        _hd_bad.append("replay 출력에서 1h 승률을 못 읽었다")
+    elif not _dh:
+        _hd_bad.append("devpost 에서 그 제목을 못 찾았다")
+    elif abs(int(_dh[0]) - float(_rw[2])) > 1.0:
+        _hd_bad.append(f"제목 {_dh[0]} % vs replay {_rw[2]} % ({_rw[0]}/{_rw[1]})")
+    ok(NAME("Devpost 의 '밤마다 되는가' 제목이 replay 출력과 일치한다"), not _hd_bad, "; ".join(_hd_bad))
 
     gn = one(r"(\d+):00\s+\d+ nights\s+([\d.]+) %\s*<- what we recommend", out)
     rn = one(r"\*\*([\d.]+) % of nights\*\*", readme)
