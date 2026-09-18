@@ -52,6 +52,7 @@ NAMES = [
     "시계 변환 기지답 시험이 통과한다",
     "IESO 시각을 현지 시각으로 바꾸지 않고 쓰는 곳이 없다",
     "문서가 말하는 '가장 더러운 앞 N시간'이 실제 순위와 맞는다",
+    "영상·제출에 쓰는 PNG 가 SVG 보다 낡지 않았다",
 ]
 result = {n: (False, "실행되지 않음") for n in NAMES}
 assert len(NAMES) == len(set(NAMES)), "검사 이름이 중복된다"
@@ -605,6 +606,44 @@ if os.path.exists(DATA):
                 _rank_bad.append(
                     f"{_f}: 가장 더러운 {_n1}시각 {sorted(_by_gas[:_n1])} ≠ 앞 {_n1}시간 {_opens[:_n1]}")
     ok(NAME("문서가 말하는 '가장 더러운 앞 N시간'이 실제 순위와 맞는다"), not _rank_bad, "; ".join(_rank_bad[:2]))
+
+    # **영상이 쓰는 것은 SVG 가 아니라 PNG 다.** SVG 는 매 실행 다시 그려지고 검사도 받는데,
+    # PNG 는 `tools/svg2png.py` 를 사람이 손으로 돌려야 생긴다. 시계 정렬을 고친 뒤 아무도
+    # 안 돌려서, **사흘 묵은 chart.png 가 영상에 그대로 실렸다** — 그림은 20:00·2:00 을,
+    # 표와 낭독은 21:00·3:00 을 말하고 있었다. 검사 32개가 전부 초록인 채로.
+    #
+    # **시각이 아니라 내용으로 묶는다.** mtime 으로 쳤더니 이 검사 자신이 SVG 를 다시 그려서
+    # PNG 가 늘 '낡은 것'이 됐다. svg2png.py 가 출처 SVG 의 해시를 .png-from.json 에 적고,
+    # 여기서 지금 SVG 의 해시와 대조한다.
+    _stamp_p = os.path.join(FIG, ".png-from.json")
+    _png_bad = []
+    _stamp = {}
+    if not os.path.exists(_stamp_p):
+        _png_bad.append(".png-from.json 이 없다 — python3 tools/svg2png.py figures/*.svg 를 돌려라")
+    else:
+        try:
+            import json as _json
+            _stamp = _json.load(open(_stamp_p, encoding="utf-8"))
+        except Exception as _e:
+            _png_bad.append(f".png-from.json 을 못 읽었다: {_e}")
+    import hashlib as _hl
+    def _sha16(_p):
+        return _hl.sha256(open(_p, "rb").read()).hexdigest()[:16]
+    for _png, _src in (("card.png", "card.svg"), ("chart.png", "chart.svg"),
+                       ("thumbnail.png", "card.png")):
+        _pp, _sp = os.path.join(FIG, _png), os.path.join(FIG, _src)
+        if not os.path.exists(_pp):
+            _png_bad.append(f"{_png} 이 없다"); continue
+        if not os.path.exists(_sp):
+            _png_bad.append(f"{_src} 가 없다"); continue
+        _rec = _stamp.get(_png)
+        if not _rec:
+            _png_bad.append(f"{_png} 의 출처 기록이 없다"); continue
+        if _rec.get("from") != _src:
+            _png_bad.append(f"{_png} 의 출처가 {_rec.get('from')} 로 적혀 있다 (기대 {_src})"); continue
+        if _rec.get("sha") != _sha16(_sp):
+            _png_bad.append(f"{_png} 이 지금 {_src} 에서 나온 것이 아니다 — python3 tools/svg2png.py 를 돌려라")
+    ok(NAME("영상·제출에 쓰는 PNG 가 SVG 보다 낡지 않았다"), not _png_bad, "; ".join(_png_bad[:3]))
 
     gn = one(r"(\d+):00\s+\d+ nights\s+([\d.]+) %\s*<- what we recommend", out)
     rn = one(r"\*\*([\d.]+) % of nights\*\*", readme)

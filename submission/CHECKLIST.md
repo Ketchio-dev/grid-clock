@@ -16,8 +16,10 @@ python3 src/determinism.py data/fuel2026.xml    # 시드 5종에서 동일
 
 - [ ] 위 셋 전부 통과 (사보타주는 수 분 걸린다. **도는 동안 저장소를 건드리지 마라** —
       복원이 네 편집을 되돌린다. 도구가 그런 일이 있었으면 경고를 찍는다)
-- [ ] `python3 src/card.py data/fuel2026.xml 20` — **제출용 카드는 20시(차이 91 g)** 여야 한다
+- [ ] `python3 src/card.py data/fuel2026.xml 20` — **제출용 카드는 20시(차이 89 g)** 여야 한다
 - [ ] `python3 tools/svg2png.py figures/card.svg figures/chart.svg` — PNG 재생성
+      (**빼먹으면 검사가 잡는다** — PNG 는 출처 SVG 의 해시로 묶여 있다. 한 번 빼먹어서
+      사흘 묵은 차트가 영상에 실린 적이 있다)
 - [ ] `python3 tools/svg2png.py --thumb figures/card.png figures/thumbnail.png` — 3:2 썸네일
 - [ ] **그림 넷을 눈으로 열어 본다.** 변환기가 한 번 차트 오른쪽을 잘라먹은 적 있다(49절)
 

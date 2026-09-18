@@ -183,6 +183,9 @@ SABS = [
      "The four dirtiest hours of those twelve are the first four",
      "The six dirtiest hours of those twelve are the first six",
      "가장 더러운 앞 N시간"),
+    ("PNG 출처 해시를 옛 것으로 되돌린다", "figures/.png-from.json",
+     r"re:\"sha\": \"[0-9a-f]{16}\"", '"sha": "deadbeefdeadbeef"',
+     "PNG 가 SVG 보다 낡지 않았다"),
 ]
 
 def check():

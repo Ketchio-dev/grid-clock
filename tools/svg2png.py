@@ -14,7 +14,7 @@ Devpost 이미지 갤러리는 JPG·PNG·GIF 만 받는다 (SVG 불가, 최대 5
 
 사용:  python3 tools/svg2png.py figures/*.svg
 """
-import glob, io, os, re, subprocess, sys, tempfile
+import glob, hashlib, io, json, os, re, subprocess, sys, tempfile
 
 def convert(svg_path, out_dir, render=1800):
     svg = io.open(svg_path, encoding="utf-8").read()
@@ -75,17 +75,49 @@ def make_thumb(png_path, out_path, ratio=3/2):
     return canvas.size
 
 
+# PNG 가 어느 SVG 에서 나왔는지 **내용으로** 남긴다.
+# 시각(mtime)으로 묶으면 SVG 를 다시 그리는 것만으로 PNG 가 '낡은 것'이 된다 —
+# 실제로 그렇게 만들었다가 검사가 영원히 빨개졌다. 해시는 그런 일이 없다.
+STAMP = "figures/.png-from.json"
+
+
+def _sha(path):
+    return hashlib.sha256(io.open(path, "rb").read()).hexdigest()[:16]
+
+
+def stamp(root, pairs):
+    """pairs: [(png 이름, 출처 파일 경로)]"""
+    f = os.path.join(root, STAMP)
+    cur = {}
+    if os.path.exists(f):
+        try:
+            cur = json.load(io.open(f, encoding="utf-8"))
+        except Exception:
+            cur = {}
+    for png, src in pairs:
+        cur[os.path.basename(png)] = {"from": os.path.basename(src), "sha": _sha(src)}
+    io.open(f, "w", encoding="utf-8").write(json.dumps(cur, ensure_ascii=False, indent=1,
+                                                      sort_keys=True) + "\n")
+
+
 if __name__ == "__main__":
     if sys.argv[1:2] == ["--thumb"]:
         src, dst = sys.argv[2], sys.argv[3]
         sz = make_thumb(src, dst)
+        stamp(os.path.dirname(os.path.dirname(os.path.abspath(dst))), [(dst, src)])
         print(f"  썸네일 {os.path.basename(dst)} {sz[0]}x{sz[1]} 비율 {sz[0]/sz[1]:.2f} "
               f"{os.path.getsize(dst)/1024:.0f} KB")
         raise SystemExit(0)
     args = sys.argv[1:]
     if not args:
         raise SystemExit("사용: python3 tools/svg2png.py <svg...>")
+    done = []
     for svg in args:
         dst, info = convert(svg, os.path.dirname(os.path.abspath(svg)))
         kb = f"{os.path.getsize(dst)/1024:.0f} KB" if dst else ""
         print(f"  {os.path.basename(svg):<12} -> {os.path.basename(dst) if dst else '실패':<12} {info} {kb}")
+        if dst:
+            done.append((dst, svg))
+    if done:
+        stamp(os.path.dirname(os.path.dirname(os.path.abspath(args[0]))), done)
+        print(f"  출처 해시를 {STAMP} 에 적었다")

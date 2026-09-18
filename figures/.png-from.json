@@ -1,0 +1,14 @@
+{
+ "card.png": {
+  "from": "card.svg",
+  "sha": "c67a447c2edbe5a7"
+ },
+ "chart.png": {
+  "from": "chart.svg",
+  "sha": "088782bf04cba594"
+ },
+ "thumbnail.png": {
+  "from": "card.png",
+  "sha": "fc07c30381c2185c"
+ }
+}
