@@ -666,6 +666,9 @@ if os.path.exists(DATA):
         (r"(\d+)\s*planted defects", n_sabs, "사보타주"),
         (r"(\d+) defects are\s*\n?\s*planted", n_sabs, "사보타주"),
         (r"sabotage\.py[^\n]*?#\s*(\d+)\s*planted", n_sabs, "사보타주"),
+        # "14 then, **27 now**" 처럼 산문 안에 숨은 것도 잡는다. 제출된 Devpost 본문에
+        # 이 표현으로 낡은 수가 남아 있었고 위 패턴들은 전부 비켜 갔다.
+        (r"\d+ then, \*\*(\d+) now\*\*", n_checks, "검사"),
     ]
     for _f in _docs2:
         if not os.path.exists(_f):
